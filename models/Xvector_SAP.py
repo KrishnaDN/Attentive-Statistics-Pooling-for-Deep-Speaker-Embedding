@@ -18,11 +18,11 @@ class X_vector_Attn_Pooling(nn.Module):
     def __init__(self, input_dim = 40, num_classes=462):
         super(X_vector_Attn_Pooling, self).__init__()
         ## Frame level feature processing
-        self.tdnn1 = TDNN(input_dim=input_dim, output_dim=512, context_size=5, dilation=1,dropout_p=0.5)
-        self.tdnn2 = TDNN(input_dim=512, output_dim=512, context_size=5, dilation=2,dropout_p=0.5)
-        self.tdnn3 = TDNN(input_dim=512, output_dim=512, context_size=7, dilation=3,dropout_p=0.5)
-        self.tdnn4 = TDNN(input_dim=512, output_dim=512, context_size=1, dilation=1,dropout_p=0.5)
-        self.tdnn5 = TDNN(input_dim=512, output_dim=512, context_size=1, dilation=1,dropout_p=0.5)
+        self.tdnn1 = TDNN(input_dim=input_dim, output_dim=512, context_size=5, dilation=1,dropout_p=0.2)
+        self.tdnn2 = TDNN(input_dim=512, output_dim=512, context_size=5, dilation=2,dropout_p=0.2)
+        self.tdnn3 = TDNN(input_dim=512, output_dim=512, context_size=7, dilation=3,dropout_p=0.2)
+        self.tdnn4 = TDNN(input_dim=512, output_dim=512, context_size=1, dilation=1,dropout_p=0.2)
+        self.tdnn5 = TDNN(input_dim=512, output_dim=512, context_size=1, dilation=1,dropout_p=0.2)
         ### Statistics attentive pooling
         self.attention = Classic_Attention(512,512)
         #### Frame levelPooling

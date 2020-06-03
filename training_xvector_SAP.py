@@ -60,7 +60,6 @@ def train(dataloader_train,epoch):
     full_gts=[]
     model.train()
     for i_batch, sample_batched in enumerate(dataloader_train):
-        break
     
         features = torch.from_numpy(np.asarray([torch_tensor.numpy().T for torch_tensor in sample_batched[0]])).float()
         labels = torch.from_numpy(np.asarray([torch_tensor[0].numpy() for torch_tensor in sample_batched[1]]))
@@ -74,8 +73,8 @@ def train(dataloader_train,epoch):
         optimizer.step()
         train_loss_list.append(loss.item())
         #train_acc_list.append(accuracy)
-        #if i_batch%10==0:
-        #    print('Loss {} after {} iteration'.format(np.mean(np.asarray(train_loss_list)),i_batch))
+        if i_batch%10==0:
+            print('Loss {} after {} iteration'.format(np.mean(np.asarray(train_loss_list)),i_batch))
         
         predictions = np.argmax(pred_logits.detach().cpu().numpy(),axis=1)
         for pred in predictions:
@@ -86,7 +85,9 @@ def train(dataloader_train,epoch):
     mean_acc = accuracy_score(full_gts,full_preds)
     mean_loss = np.mean(np.asarray(train_loss_list))
     print('Total training loss {} and training Accuracy {} after {} epochs'.format(mean_loss,mean_acc,epoch))
-    
+    model_save_path = os.path.join('save_model', 'best_check_point_'+str(epoch)+'_'+str(mean_loss))
+    state_dict = {'model': model.state_dict(),'optimizer': optimizer.state_dict(),'epoch': epoch}
+    torch.save(state_dict, model_save_path)
 
 
 def validation(dataloader_val,epoch):
@@ -114,11 +115,9 @@ def validation(dataloader_val,epoch):
         mean_loss = np.mean(np.asarray(val_loss_list))
         print('Total vlidation loss {} and Validation accuracy {} after {} epochs'.format(mean_loss,mean_acc,epoch))
         
-        model_save_path = os.path.join('save_model', 'best_check_point_'+str(epoch)+'_'+str(mean_loss))
-        state_dict = {'model': model.state_dict(),'optimizer': optimizer.state_dict(),'epoch': epoch}
-        torch.save(state_dict, model_save_path)
+        
     
 if __name__ == '__main__':
     for epoch in range(args.num_epochs):
         train(dataloader_train,epoch)
-        validation(dataloader_val,epoch)
+        
