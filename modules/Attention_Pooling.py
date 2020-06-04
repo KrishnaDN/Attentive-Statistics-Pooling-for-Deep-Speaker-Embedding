@@ -23,7 +23,7 @@ class Classic_Attention(nn.Module):
     def forward(self,inputs):
         lin_out = self.lin_proj(inputs)
         v_view = self.v.unsqueeze(0).expand(lin_out.size(0), len(self.v)).unsqueeze(2)
-        attention_weights = lin_out.bmm(v_view).squeeze()
+        attention_weights = F.tanh(lin_out.bmm(v_view).squeeze())
         attention_weights_normalized = F.softmax(attention_weights,1)
         return attention_weights_normalized
 
